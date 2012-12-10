@@ -1053,5 +1053,10 @@
 			{"key": "setting.command_mode"},
 			{"key": "vi_has_repeat_digit", "operand": false}
 		]
-	}
+	},
+
+    // Require https://github.com/misfo/Shell-Turtlestein
+    { "keys": ["!"], "command": "shell_prompt",
+        "context": [{"key": "setting.command_mode"}]
+    }
 ]
