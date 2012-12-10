@@ -767,26 +767,6 @@ class ViDelete(sublime_plugin.TextCommand):
             set_register(self.view, '1', forward=False)
             self.view.run_command('left_delete')
 
-class ViLeftDelete(sublime_plugin.TextCommand):
-    def run(self, edit, register = '"'):
-        set_register(self.view, register, forward=False)
-        set_register(self.view, '1', forward=False)
-        self.view.run_command('left_delete')
-        clip_empty_selection_to_line_contents(self.view)
-
-class ViRightDelete(sublime_plugin.TextCommand):
-    def run(self, edit, register = '"'):
-        set_register(self.view, register, forward=True)
-        set_register(self.view, '1', forward=True)
-        self.view.run_command('right_delete')
-        clip_empty_selection_to_line_contents(self.view)
-
-class ViCopy(sublime_plugin.TextCommand):
-    def run(self, edit, register = '"'):
-        set_register(self.view, register, forward=True)
-        set_register(self.view, '0', forward=True)
-        transform_selection_regions(self.view, shrink_to_first_char)
-
 class ViPrefixableCommand(sublime_plugin.TextCommand):
     # Ensure register and repeat are picked up from g_input_state, and that
     # it'll be recorded on the undo stack
@@ -810,6 +790,54 @@ class ViPrefixableCommand(sublime_plugin.TextCommand):
             return self.run(edit, **args)
         finally:
             self.view.end_edit(edit)
+
+class ViDeleteWithBookmark(ViPrefixableCommand):
+    def run(self, edit, character, register = '"'):
+        region = self.view.get_regions("bookmark_" + character)
+        if len(region) == 0:
+            return
+        a = self.view.full_line(region[0].end()).a
+        b = self.view.full_line(self.view.sel()[0].end()).b
+        s = sublime.Region(a, b)
+        self.view.sel().clear()
+        self.view.sel().add(s)
+        set_register(self.view, register, forward=True)
+        set_register(self.view, '1', forward=True)
+        self.view.run_command('left_delete')
+
+class ViLeftDelete(sublime_plugin.TextCommand):
+    def run(self, edit, register = '"'):
+        set_register(self.view, register, forward=False)
+        set_register(self.view, '1', forward=False)
+        self.view.run_command('left_delete')
+        clip_empty_selection_to_line_contents(self.view)
+
+class ViRightDelete(sublime_plugin.TextCommand):
+    def run(self, edit, register = '"'):
+        set_register(self.view, register, forward=True)
+        set_register(self.view, '1', forward=True)
+        self.view.run_command('right_delete')
+        clip_empty_selection_to_line_contents(self.view)
+
+class ViCopy(sublime_plugin.TextCommand):
+    def run(self, edit, register = '"'):
+        set_register(self.view, register, forward=True)
+        set_register(self.view, '0', forward=True)
+        transform_selection_regions(self.view, shrink_to_first_char)
+
+class ViCopyWithBookmark(ViPrefixableCommand):
+    def run(self, edit, character, register = '"'):
+        region = self.view.get_regions("bookmark_" + character)
+        if len(region) == 0:
+            return
+        a = self.view.full_line(region[0].end()).a
+        b = self.view.full_line(self.view.sel()[0].end()).b
+        s = sublime.Region(a, b)
+        self.view.sel().clear()
+        self.view.sel().add(s)
+        set_register(self.view, register, forward=True)
+        set_register(self.view, '0', forward=True)
+        transform_selection_regions(self.view, shrink_to_first_char)
 
 class ViPasteRight(ViPrefixableCommand):
     def advance(self, pt):

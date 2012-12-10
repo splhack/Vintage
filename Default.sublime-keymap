@@ -383,9 +383,17 @@
 		"context": [{"key": "setting.command_mode"}]
 	},
 
+	{ "keys": ["d", "'", "<character>"], "command": "vi_delete_with_bookmark",
+		"context": [{"key": "setting.command_mode"}]
+	},
+
 	{ "keys": ["y"], "command": "set_action", "args": {
 		"action": "vi_copy",
 		"description": "Yank"},
+		"context": [{"key": "setting.command_mode"}]
+	},
+
+	{ "keys": ["y", "'", "<character>"], "command": "vi_copy_with_bookmark",
 		"context": [{"key": "setting.command_mode"}]
 	},
 
