@@ -675,6 +675,7 @@ class ExitInsertMode(sublime_plugin.TextCommand):
         self.view.run_command('glue_marked_undo_groups')
 
     def run(self, edit):
+        self.view.run_command('hide_auto_complete')
         self.view.settings().set('command_mode', True)
         self.view.settings().set('inverse_caret_state', True)
 
