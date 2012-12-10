@@ -150,6 +150,9 @@
 	{ "keys": ["v"], "command": "enter_visual_mode",
 		"context": [{"key": "setting.command_mode"}]
 	},
+	{ "keys": ["ctrl+v"], "command": "enter_visual_mode",
+		"context": [{"key": "setting.command_mode"}]
+	},
 	{ "keys": ["v"], "command": "set_motion_mode", "args": {"mode": "normal"},
 		"context":
 		[
