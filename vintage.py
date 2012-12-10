@@ -1126,3 +1126,14 @@ class MoveGroupFocus(sublime_plugin.WindowCommand):
             self.window.focus_group(matches.next())
         except StopIteration:
             return
+
+class MoveGroupFocusNext(sublime_plugin.WindowCommand):
+    def run(self):
+        active_group = self.window.active_group() + 1
+        cells = self.window.get_layout()['cells']
+        if active_group >= len(cells):
+            active_group = 0
+        try:
+            self.window.focus_group(active_group)
+        except StopIteration:
+            return
