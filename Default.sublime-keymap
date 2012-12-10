@@ -1070,5 +1070,13 @@
     // Require https://github.com/misfo/Shell-Turtlestein
     { "keys": ["!"], "command": "shell_prompt",
         "context": [{"key": "setting.command_mode"}]
-    }
+    },
+
+	{ "keys": ["ctrl+d"], "command": "vi_unindent",
+		"context":
+		[
+			{ "key": "setting.command_mode", "operand": false },
+			{ "key": "setting.is_widget", "operand": false }
+		]
+	}
 ]
